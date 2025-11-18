@@ -1,0 +1,7 @@
+Datos del Proyecto Final
+
+Nombre del proyecto: Aromas del valle
+Creadores: Bastian Jesús y Torres Esteban
+Objetivos: Llevar el registro de veta de vinos y licores
+
+Ultima actualización: 18 de Noviembre de 2025 1:34 pm
