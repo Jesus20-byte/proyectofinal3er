@@ -1,0 +1,5 @@
+1|Tonayan|120|Licor
+2|Vino Tinto 3v|500|Vino
+3|Cuatro Soles Afrutado|130|Vino
+4|Hpnotiq|600|Licor
+5|Gran Malo Horchata|400|Licor
