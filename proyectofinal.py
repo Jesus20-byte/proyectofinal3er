@@ -70,7 +70,18 @@ def mostrar_ticket(producto, precio, cantidad, total):
   ticket.title("Ticket de Venta")
   ticket.geometry("300x350")
   ticket.resizable(False, False)
+  try:
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        img = Image.open(os.path.join(BASE_DIR, "ventas2025.png")).convert("RGBA")
+        img = img.resize((90, 90))               # Ajustar tamaño para el ticket
+        logo = ImageTk.PhotoImage(img)
 
+        lbl_logo = tk.Label(ticket, image=logo, bg="white")
+        lbl_logo.image = logo                      # Mantener referencia
+        lbl_logo.pack(pady=5)
+
+  except Exception as e:
+        tk.Label(ticket, text="(Logo no disponible)", bg="white").pack()
   # Fecha y hora
   fecha_hora = datetime.now().strftime("%d/%m/%Y %I:%M:%S %p")
 
