@@ -62,6 +62,40 @@ def abrir_registro_productos():
    btn_guardar = tk.Button(reg, text="Guardar Producto", command=guardar_producto)
    btn_guardar.pack(pady=20)
 
+#Aqui se coloca el codigo del tiket
+from datetime import datetime
+
+def mostrar_ticket(producto, precio, cantidad, total):
+  ticket = tk.Toplevel()
+  ticket.title("Ticket de Venta")
+  ticket.geometry("300x350")
+  ticket.resizable(False, False)
+
+  # Fecha y hora
+  fecha_hora = datetime.now().strftime("%d/%m/%Y %I:%M:%S %p")
+
+  # Texto del ticket
+  texto = (
+  " *** Aromas Del Valle  ***\n"
+  "--------------------------------------\n"
+  f"Fecha: {fecha_hora}\n"
+  "--------------------------------------\n"
+  f"Producto: {producto}\n"
+  f"Precio: ${precio}\n"
+  f"Cantidad: {cantidad}\n"
+  "--------------------------------------\n"
+  f"TOTAL: ${total}\n"
+  "--------------------------------------\n"
+  " ¡GRACIAS POR SU COMPRA!\n"
+  )
+
+  lbl_ticket = tk.Label(ticket, text=texto, justify="left", font=("Consolas", 11))
+  lbl_ticket.pack(pady=15)
+
+  btn_cerrar = ttk.Button(ticket, text="Cerrar", command=ticket.destroy)
+  btn_cerrar.pack(pady=10)
+
+
 def abrir_registro_ventas():
    ven = tk.Toplevel()
    ven.title("Registro de Ventas")
@@ -147,7 +181,7 @@ def abrir_registro_ventas():
       archivov = os.path.join(BASE_DIR,"ventas.txt")
       with open(archivov, "a", encoding="utf-8") as archivo:
          archivo.write(f"{prod}|{precio}|{cant}|{total}\n")
-         messagebox.showinfo("Venta Registrada", "La venta se registró correctamente.")
+      mostrar_ticket(prod, precio, cant, total)
       # Limpiar campos
       cb_producto.set("")
       txt_precio.config(state="normal"); txt_precio.delete(0, tk.END); txt_precio.config(state="readonly")
