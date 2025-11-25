@@ -205,13 +205,114 @@ def abrir_registro_ventas():
    btn_guardar = ttk.Button(ven, text="Registrar Venta", command=registrar_venta)
    btn_guardar.pack(pady=25)
 
+
 def abrir_reportes():
-    messagebox.showinfo("Reportes", "Aquí irá el módulo de reportes.")
+    ventana = tk.Toplevel()
+    ventana.title("Reporte de Ventas")
+    ventana.geometry("700x500")
+    ventana.configure(bg="#f2f2f2")
+
+    titulo = tk.Label(
+        ventana,
+        text="Reporte de Ventas Realizadas",
+        font=("Arial", 16, "bold"),
+        bg="#f2f2f2"
+    )
+    titulo.pack(pady=10)
+
+    # Frame para el GRID
+    frame_tabla = tk.Frame(ventana)
+    frame_tabla.pack(pady=10)
+
+    # Columnas del archivo ventas.txt
+    columnas = ("producto", "precio", "cantidad", "total")
+    tabla = ttk.Treeview(frame_tabla, columns=columnas, show="headings", height=15)
+
+    # Encabezados
+    tabla.heading("producto", text="Producto")
+    tabla.heading("precio", text="Precio")
+    tabla.heading("cantidad", text="Cantidad")
+    tabla.heading("total", text="Total")
+
+    # Tamaño de columnas
+    tabla.column("producto", width=250, anchor="center")
+    tabla.column("precio", width=100, anchor="center")
+    tabla.column("cantidad", width=100, anchor="center")
+    tabla.column("total", width=120, anchor="center")
+    tabla.pack()
+
+    # ---------- Leer archivo ventas.txt ----------
+    total_ventas = 0  # acumulador
+
+    try:
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        archivo = os.path.join(BASE_DIR, "ventas.txt")
+
+        with open(archivo, "r", encoding="utf-8") as f:
+            for linea in f:
+                if linea.strip():
+                    datos = linea.strip().split("|")
+                    if len(datos) == 4:
+                        tabla.insert("", tk.END, values=datos)
+
+                        # Sumar columna "total"
+                        try:
+                            total_ventas += float(datos[3])
+                        except:
+                            pass
+
+    except FileNotFoundError:
+        messagebox.showerror("Error", "El archivo ventas.txt no existe.")
+        ventana.destroy()
+        return
+
+    # ---------- Mostrar total de ventas ----------
+    lbl_total = tk.Label(
+        ventana,
+        text=f"TOTAL DE VENTAS: ${total_ventas:,.2f}",
+        font=("Arial", 14, "bold"),
+        bg="#f2f2f2",
+        fg="#83150D"
+    )
+    lbl_total.pack(pady=10)
 
 def abrir_acerca_de():
-    messagebox.showinfo("Acerca de", "Punto de Venta de Vinos y Licores\nProyecto Escolar\nVersión 1.0")
+   reg1 = tk.Toplevel()
+   reg1.title("Acerca de")
+   reg1.geometry("400x400")
+   reg1.resizable(False, False)
+   reg1.configure(bg="#83150D")  # Fondo vino oscuro
+   try:
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        img = Image.open(os.path.join(BASE_DIR, "ventas2025.png")).convert("RGBA")
+        img = img.resize((150, 150))               # Ajustar tamaño para el ticket
+        logo = ImageTk.PhotoImage(img)
+        datos = img.getdata()
+        nueva = []
+        for item in datos:
+            if item[:3] == (255, 255, 255):  # si es blanco
+                nueva.append((255, 255, 255, 0))  # hacerlo transparente
+            else:
+                nueva.append(item)
+        img.putdata(nueva)
 
 
+        lbl_logo = tk.Label(reg1, image=logo, bg="white")
+        lbl_logo.image = logo                      # Mantener referencia
+        lbl_logo.pack(pady=5)
+
+   except Exception as e:
+        tk.Label(reg1, text="(Logo no disponible)", bg="white").pack()
+   # --- Etiquetas y Campos de Texto ---
+
+   lbl_id = tk.Label(reg1, text="Acerca de", bg="#83150D", font=("Arial", 15))
+   lbl_id.pack(pady=5)
+   lbl_desc = tk.Label(reg1, text="Software Aromas del valle", bg="#83150D", font=("Arial", 12))
+   lbl_desc.pack(pady=5)
+   lbl_precio = tk.Label(reg1, text="Creado por: Torres Esteban y Bastian Jesus", bg="#83150D", font=("Arial", 12))
+   lbl_precio.pack(pady=5)
+   lbl_precio = tk.Label(reg1, text="Grupo: 3A Programacion Vespertino", bg="#83150D", font=("Arial", 12))
+   lbl_precio.pack(pady=5)
 # -------------------------
 # CREAR BOTÓN REDONDEADO
 # -------------------------
